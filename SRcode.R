@@ -2,7 +2,7 @@ library(ggplot2)
 library(reshape2)
 library(stringr)
 
-data = read.table ('/Users/laurenhulse/SR/pythcomb2/casa_paths_extracted.txt', sep = ' ')
+data = read.table ('casa_paths_extracted.txt', sep = ' ')
 colnames (data) = c('name', 'empty' , 'VCL', 'VAP', 'VSL', 'LIN', 'WOB', 'PROG', 'BCF','segment')
 data$spermid = 1:nrow(data)
 
