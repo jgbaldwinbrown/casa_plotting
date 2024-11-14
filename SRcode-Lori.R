@@ -28,6 +28,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
   scale_y_continuous(name = "VCL(um/sec)")+
+  ylim(0,70)+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VCL") 
  
@@ -38,7 +39,75 @@ dev.off()
 
 ## Generating VSL Plots
 
+g = ggplot(data = mdetailed[mdetailed$variable == "VSL" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "VSL(um/sec)")+
+  ylim(0,70)+
+  guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
+  ggtitle("VSL") 
 
 
+pdf("VSL.pdf", height = 6, width = 8)
+print(g)
+dev.off()
 
+## Generating VAP Plots
+
+g = ggplot(data = mdetailed[mdetailed$variable == "VAP" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "VAP(um/sec)")+
+  ylim(0,70)+
+  guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
+  ggtitle("VAP") 
+
+
+pdf("VAP.pdf", height = 6, width = 8)
+print(g)
+dev.off()
+
+## Generating LIN plots
+g = ggplot(data = mdetailed[mdetailed$variable == "LIN" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "LIN")+
+  ylim(0,1)+
+  guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
+  ggtitle("LIN") 
+
+
+pdf("LIN.pdf", height = 6, width = 8)
+print(g)
+dev.off()
+
+## Generating WOB plots
+g = ggplot(data = mdetailed[mdetailed$variable == "WOB" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "WOB")+
+  ylim(0,1)+
+  guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
+  ggtitle("WOB") 
+
+
+pdf("WOB.pdf", height = 6, width = 8)
+print(g)
+dev.off()
 
