@@ -25,15 +25,20 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "VCL(um/sec")+
-  guides(fill=guide_legend(title="Source of Recording"),color=guide_legend(title="Source of Sperm"))+
-  ggtitle("VCL")
+  scale_y_continuous(name = "VCL(um/sec)")+
+  guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
+  ggtitle("VCL") 
  
 
-pdf("VCL2.pdf", height = 6, width = 8)
+pdf("VCL.pdf", height = 6, width = 8)
 print(g)
 dev.off()
+
+## Generating VSL Plots
+
+
+
 
 
