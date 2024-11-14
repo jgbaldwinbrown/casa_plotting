@@ -30,7 +30,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
+  scale_x_continuous(name = "Segment Number") +
   scale_y_continuous(name = "VCL(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VCL") 
@@ -48,7 +48,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VSL" & mdetailed$segnum > 1.5
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
+  scale_x_continuous(name = "Segment Number") +
   scale_y_continuous(name = "VSL(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VSL") 
@@ -66,7 +66,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VAP" & mdetailed$segnum > 1.5
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
+  scale_x_continuous(name = "Segment Number") +
   scale_y_continuous(name = "VAP(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VAP") 
@@ -83,7 +83,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "LIN" & mdetailed$segnum > 1.5
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
+  scale_x_continuous(name = "Segment Number") +
   scale_y_continuous(name = "LIN",limits=c(0,1))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("LIN") 
@@ -100,7 +100,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "WOB" & mdetailed$segnum > 1.5
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
+  scale_x_continuous(name = "Segment Number") +
   scale_y_continuous(name = "WOB",limits=c(0,1))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("WOB") 
