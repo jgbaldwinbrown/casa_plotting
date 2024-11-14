@@ -2,7 +2,7 @@
 data = read.table ('casa_paths_extracted.txt', sep = ' ') 
 colnames (data) = c('name', 'empty' , 'VCL', 'VAP', 'VSL', 'LIN', 'WOB', 'PROG', 'BCF','segment') # Adds titles to columns
 data$spermid = 1:nrow(data) # adds sperm ID to the table based on position number.
-
+scale = 2.0
 ## Generating VCL Plots
 mdata = melt(data, id.vars = c("name", "spermid", "segment"))
 detailed = data
@@ -27,13 +27,12 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "VCL(um/sec)")+
-  ylim(0,70)+
+  scale_y_continuous(name = "VCL(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VCL") 
  
 
-pdf("VCL.pdf", height = 6, width = 8)
+pdf("VCL.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
@@ -46,13 +45,12 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VSL" & mdetailed$segnum > 1.5
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "VSL(um/sec)")+
-  ylim(0,70)+
+  scale_y_continuous(name = "VSL(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VSL") 
 
-
-pdf("VSL.pdf", height = 6, width = 8)
+scale = 2.0
+pdf("VSL.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
@@ -65,13 +63,12 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VAP" & mdetailed$segnum > 1.5
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "VAP(um/sec)")+
-  ylim(0,70)+
+  scale_y_continuous(name = "VAP(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VAP") 
 
 
-pdf("VAP.pdf", height = 6, width = 8)
+pdf("VAP.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
@@ -83,13 +80,12 @@ g = ggplot(data = mdetailed[mdetailed$variable == "LIN" & mdetailed$segnum > 1.5
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "LIN")+
-  ylim(0,1)+
+  scale_y_continuous(name = "LIN",limits=c(0,1))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("LIN") 
 
 
-pdf("LIN.pdf", height = 6, width = 8)
+pdf("LIN.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
@@ -99,15 +95,16 @@ g = ggplot(data = mdetailed[mdetailed$variable == "WOB" & mdetailed$segnum > 1.5
   scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "WOB")+
-  ylim(0,1)+
+  theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number", breaks = seq (2,4,1)) +
+  scale_y_continuous(name = "WOB",limits=c(0,1))
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
-  ggtitle("WOB") 
-
-
-pdf("WOB.pdf", height = 6, width = 8)
+  ggtitle("WOB")
+  
+pdf("WOB.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
+  
+  
+
 

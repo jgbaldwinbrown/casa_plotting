@@ -93,8 +93,7 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment number") +
-  scale_y_continuous(name = "VCL(um/sec)")+
-  ylim(0,70)+
+  scale_y_continuous(name = "VCL(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
   ggtitle("VCL") 
 
