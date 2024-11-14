@@ -1,0 +1,39 @@
+## Reading Data into Workspace ##
+data = read.table ('casa_paths_extracted.txt', sep = ' ') 
+colnames (data) = c('name', 'empty' , 'VCL', 'VAP', 'VSL', 'LIN', 'WOB', 'PROG', 'BCF','segment') # Adds titles to columns
+data$spermid = 1:nrow(data) # adds sperm ID to the table based on position number.
+
+## Generating VCL Plots
+mdata = melt(data, id.vars = c("name", "spermid", "segment"))
+detailed = data
+detailed$extracted = sapply(detailed$segment, function(x){return(str_extract(x, "[a-zA-Z]+"))})
+detailed$segnum = sapply(detailed$segment, function(x){as.numeric(str_extract(x, "[0-9]+"))})
+mdetailed = melt(detailed, id.vars = c("name", "segment", "spermid", "extracted", "segnum"))
+
+mdetailed$prettyextracted = sapply(mdetailed$extracted, function(x) {
+  if (x == "e") {
+      return("Extracted")
+  }
+  if (x == "s") {
+    return("In Device")
+  }
+  return(x)
+})
+
+g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "VCL(um/sec")+
+  guides(fill=guide_legend(title="Source of Recording"),color=guide_legend(title="Source of Sperm"))+
+  ggtitle("VCL")
+ 
+
+pdf("VCL2.pdf", height = 6, width = 8)
+print(g)
+dev.off()
+
+

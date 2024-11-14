@@ -19,7 +19,7 @@ data$run = sapply(data$name, function(x) {strsplit(x, split ="/")[[1]][2]})
 
 mdata = melt(data, id.vars = c("name", "spermid", "run", "segment"))
 
-g = ggplot(data = mdata[mdata$variable == "VCL", ], aes(run, value, fill = segment)) +
+g = ggplot(data = mdata[mdata$variable == "VCL", ], aes(segment, value, fill = segment)) +
   geom_boxplot() +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
@@ -71,6 +71,34 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
+## NEW PLOTTING
+mdetailed$prettyextracted = sapply(mdetailed$extracted, function(x) {
+  if (x == "e") {
+    return("Extracted")
+  }
+  if (x == "s") {
+    return("In Device")
+  }
+  return(x)
+})
+
+g = ggplot(data = mdetailed[mdetailed$variable == "VCL" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "VCL(um/sec")+
+  guides(fill=guide_legend(title="Source of Recording"),color=guide_legend(title="Source of Sperm"))+
+  ggtitle("VCL")
+
+
+pdf("VCL2.pdf", height = 6, width = 8)
+print(g)
+dev.off()
+
+
 pdf("scatter2.pdf", height = 6, width = 8)
 print(g)
 dev.off()
@@ -81,5 +109,5 @@ TukeyHSD(model, conf.level = 0.95)
 mean(data$VSL[data$segment == "1"])
 mean(data$VSL[data$segment == "2"])
 
-# install.packages("ggplot2")
+
 
