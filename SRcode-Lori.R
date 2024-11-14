@@ -1,3 +1,7 @@
+library(ggplot2)
+library(reshape2)
+library(stringr)
+
 ## Reading Data into Workspace ##
 data = read.table ('casa_paths_extracted.txt', sep = ' ') 
 colnames (data) = c('name', 'empty' , 'VCL', 'VAP', 'VSL', 'LIN', 'WOB', 'PROG', 'BCF','segment') # Adds titles to columns
@@ -95,12 +99,13 @@ g = ggplot(data = mdetailed[mdetailed$variable == "WOB" & mdetailed$segnum > 1.5
   scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
   theme_bw() +
   geom_smooth(method = "lm", aes(color = prettyextracted)) +
-  theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment number", breaks = seq (2,4,1)) +
-  scale_y_continuous(name = "WOB",limits=c(0,1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment number") +
+  scale_y_continuous(name = "WOB",limits=c(0,1))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
-  ggtitle("WOB")
-  
+  ggtitle("WOB") 
+
+
 pdf("WOB.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
