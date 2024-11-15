@@ -109,6 +109,27 @@ g = ggplot(data = mdetailed[mdetailed$variable == "WOB" & mdetailed$segnum > 1.5
 pdf("WOB.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
+
+## Generating Makler Count Plots
+counts = read.table ('makler_counts.txt')
+colnames (counts) = c('segment','non-motile','motile')
+
+counts$segnum = sapply(ccounts$segment, function(x){as.numeric(str_extract(x, "[0-9]+"))})
+ccounts = melt(counts, id.vars=c('segment','non-motile','motile','segnum'))
+
+g = ggplot(data=ccounts[ccounts$variable=='non-motile' & ccounts$segment != 'waste'], aes(x=segnum, y=value))+
+  geom_boxplot()+
+  theme_bw()+
+  ggtitle("Non-Motile Sperm Count") +
+  theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment Number",breaks=seq(2,4,1)) +
+  scale_y_continuous(name = "Millions/mL")
+
+pdf("NM.pdf", height = 3 * scale, width = 4 * scale)
+print(g)
+dev.off()
+
+
   
   
 
