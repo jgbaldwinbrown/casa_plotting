@@ -54,9 +54,9 @@ func AddDeads(r io.Reader, w io.Writer) error {
 				return e
 			}
 		}
-		if _, e := io.WriteString(w, strings.Join(lines[len(lines) - 1], " ")); e != nil {
-			return e
-		}
+		// if _, e := io.WriteString(w, strings.Join(lines[len(lines) - 1], " ")); e != nil {
+		// 	return e
+		// }
 	}
 	return nil
 }
