@@ -1,6 +1,7 @@
 library(ggplot2)
 library(reshape2)
 library(stringr)
+library(grid)
 
 ## Reading Data into Workspace ##
 data = read.table ('casa_paths_extracted.txt', sep = ' ') 
@@ -64,15 +65,33 @@ g = ggplot(data = mdetailed[mdetailed$variable == "VAP" & mdetailed$segnum > 1.5
   geom_boxplot(aes(fill = prettyextracted, linetype = factor(segnum))) +
   scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
   theme_bw() +
-  geom_smooth(method = "lm", aes(color = prettyextracted)) +
+  theme(axis.text = element_text(size = 18),axis.title = element_text(size=18), legend.text = element_text (size=18), plot.title = element_text (size=18))+
+  geom_smooth(method = "lm",formula = y ~ x, aes(color = prettyextracted)) +
   theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
   scale_x_continuous(name = "Segment Number",breaks=seq(2,4,1)) +
   scale_y_continuous(name = "VAP(um/sec)",limits=c(0,70))+
   guides(fill=guide_legend(title="Source"),color=guide_legend(title="Source"))+
-  ggtitle("VAP") 
+  ggtitle("Velocity Average Path (VAP)") +
+  geom_text(x = 4, y = 34, label = "***", size = 5 )
 
 
 pdf("VAP.pdf", height = 3 * scale, width = 4 * scale)
+print(g)
+dev.off()
+
+g = ggplot(data = mdetailed[mdetailed$variable == "VAP" & mdetailed$segnum > 1.5 & mdetailed$extracted != "waste" & mdetailed$extracted != "ewaste" & mdetailed$extracted != "pure", ], aes(x=segnum, y=value)) + 
+  geom_boxplot(aes(linetype = factor(segnum))) +
+  scale_linetype_manual(values = c("solid", "solid", "solid", "solid", "solid", "solid"), guide="none") +
+  theme_bw() +
+  geom_smooth(method = "lm") +
+  theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
+  scale_x_continuous(name = "Segment Number",breaks=seq(2,4,1)) +
+  scale_y_continuous(name = "VAP(um/sec)",limits=c(0,70))+
+  facet_grid(extracted~.)+
+  ggtitle("VAP") 
+
+
+pdf("VAP_facetted.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
@@ -114,21 +133,34 @@ dev.off()
 counts = read.table ('makler_counts.txt')
 colnames (counts) = c('segment','non-motile','motile')
 
-counts$segnum = sapply(ccounts$segment, function(x){as.numeric(str_extract(x, "[0-9]+"))})
-ccounts = melt(counts, id.vars=c('segment','non-motile','motile','segnum'))
+counts$segnum = sapply(counts$segment, function(x){as.numeric(str_extract(x, "[0-9]+"))})
+ccounts = melt(counts, id.vars=c('segment','segnum'))
+plotdata = ccounts[ccounts$variable=='non-motile' & ccounts$segment != 'Waste',]
 
-g = ggplot(data=ccounts[ccounts$variable=='non-motile' & ccounts$segment != 'waste'], aes(x=segnum, y=value))+
+g = ggplot(data=plotdata, aes(x=segnum, y=value))+
   geom_boxplot()+
   theme_bw()+
   ggtitle("Non-Motile Sperm Count") +
   theme(plot.title=element_text(size = 16, face = "bold", hjust = 0.5)) +
-  scale_x_continuous(name = "Segment Number",breaks=seq(2,4,1)) +
+  # scale_x_continuous(name = "Segment Number",breaks=seq(2,4,1)) +
   scale_y_continuous(name = "Millions/mL")
 
 pdf("NM.pdf", height = 3 * scale, width = 4 * scale)
 print(g)
 dev.off()
 
+significance = data.frame("segnum" = c(3.5), "value"= c(22), "thetext" = c("***"))
+
+# geom_text(data = significance, aes(thetext))
+
+g = ggplot(data=plotdata, aes(x=segnum, y=value))+
+  geom_boxplot()+
+  geom_smooth(method = "lm", formula = y ~ x) +
+  geom_text(x = 3.5, y = 15, label = "***")
+
+pdf("NM2.pdf", height = 3 * scale, width = 4 * scale)
+print(g)
+dev.off()
 
   
   
