@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"fmt"
 	"encoding/csv"
 	"os"
@@ -23,34 +24,35 @@ func ReadLines(r io.Reader) ([]string, error) {
 	return out, nil
 }
 
-func ParseDeads(line []string) (int, error) {
-	if len(line) < 1 {
+func ParseDeads(line []string, nalive int) (int, error) {
+	if len(line) < 2 {
 		return 0, fmt.Errorf("line %v too short", line)
 	}
-	val, err := strconv.Atoi(line[0])
-	return val, err
+	percalive, err := strconv.ParseFloat(line[1], 64)
+	return int(math.Round(float64(nalive) * (1.0 - percalive))), err
 }
 
-func AddDeads(r io.Reader, w io.Writer) error {
+func AddDeads(r io.Reader, w io.Writer, path string) error {
 	cr := csv.NewReader(r)
 	cr.Comma = ' '
+	cr.FieldsPerRecord = -1
 	lines, e := cr.ReadAll()
 	if e != nil {
 		return e
 	}
 	for _, l := range lines[:len(lines) - 1] {
-		if _, e := io.WriteString(w, strings.Join(l, " ")); e != nil {
+		if _, e := fmt.Fprintf(w, "%v %v\n", path, strings.Join(l, " ")); e != nil {
 			return e
 		}
 	}
 
 	if len(lines) > 0 {
-		deads, e := ParseDeads(lines[len(lines) - 1])
+		deads, e := ParseDeads(lines[len(lines) - 1], len(lines) - 1)
 		if e != nil {
 			return e
 		}
 		for i := 0; i < deads; i++ {
-			if _, e := fmt.Fprintf(w, "0 0 0 0 0 0"); e != nil {
+			if _, e := fmt.Fprintf(w, "%v  0 0 0 0 0 0 0\n", path); e != nil {
 				return e
 			}
 		}
@@ -67,7 +69,7 @@ func AddDeadsPath(path string, w io.Writer) error {
 		return err
 	}
 	defer r.Close()
-	return AddDeads(r, w)
+	return AddDeads(r, w, path)
 }
 
 func main() {
