@@ -29,7 +29,10 @@ func ParseDeads(line []string, nalive int) (int, error) {
 		return 0, fmt.Errorf("line %v too short", line)
 	}
 	percalive, err := strconv.ParseFloat(line[1], 64)
-	return int(math.Round(float64(nalive) * (1.0 - percalive))), err
+	// return int(math.Round(float64(nalive) * (1.0 - percalive))), err
+	alive := float64(nalive)
+	dead := (alive - (percalive * alive)) / percalive
+	return int(math.Round(dead)), err
 }
 
 func AddDeads(r io.Reader, w io.Writer, path string) error {
