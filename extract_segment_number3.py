@@ -1,26 +1,28 @@
 import re
 import sys
 
-def extract_with_regex(instream, outstream, ewasteregex, wasteregex, pureregex, segmentregex):
+def extract_with_regex(instream, outstream, column, ewasteregex, wasteregex, pureregex, segmentregex):
 	for line in instream:
 		stripped_line = line.rstrip("\n")
+		split_line = stripped_line.split("\t")
+		col = split_line[column]
 
-		ewastematch = ewasteregex.search(stripped_line)
+		ewastematch = ewasteregex.search(col)
 		if ewastematch:
 			outstream.write(stripped_line + " " + "ewaste" + "\n")
 			continue
 
-		wastematch = wasteregex.search(stripped_line)
+		wastematch = wasteregex.search(col)
 		if wastematch:
 			outstream.write(stripped_line + " " + "waste" + "\n")
 			continue
 
-		purematch = pureregex.search(stripped_line)
+		purematch = pureregex.search(col)
 		if purematch:
 			outstream.write(stripped_line + " " + "pure" + "\n")
 			continue
 
-		segmentmatch = segmentregex.search(stripped_line)
+		segmentmatch = segmentregex.search(col)
 		if segmentmatch:
 			eors = segmentmatch.group(2)
 			if not eors:
@@ -33,9 +35,9 @@ def extract_with_regex(instream, outstream, ewasteregex, wasteregex, pureregex, 
 def main():
 	ewasteregex = re.compile("""[Ee][Ww]aste""")
 	wasteregex = re.compile("""[Ww]aste""")
-	pureregex = re.compile("""[Uu]nloaded|pure""")
+	pureregex = re.compile("""[Uu]nloaded|[Pp]ure""")
 	segmentregex = re.compile("""(([Ee])(xtracted)?|([Ss])(egment)?)([1-6])""")
-	extract_with_regex(sys.stdin, sys.stdout, ewasteregex, wasteregex, pureregex, segmentregex)
+	extract_with_regex(sys.stdin, sys.stdout, 0, ewasteregex, wasteregex, pureregex, segmentregex)
 
 if __name__ == "__main__":
 	main()
